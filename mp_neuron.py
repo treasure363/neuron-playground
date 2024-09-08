@@ -7,14 +7,30 @@ def mp_neuron(x, w):
   return sum([x[i]*w[i] for i in range(len(x))])
 
 def generate_diagram(inputs, weights, theta):
+    num_inputs = len(inputs)
     weighted_sum = 0.0
-    diagram = "Inputs       Weights         Neuron              Output\n"
+    diagram = "Inputs       Weights         Neuron                  Output\n"
     diagram += "                         ┌───────────┐\n"
     diagram += f"                         │           │\n"
     for i in range(len(inputs)):
-      diagram += f"  {inputs[i]} ─────x{i+1}────[{weights[i]}]──────►│   {inputs[i]}*{weights[i]}={inputs[i]*weights[i]}   │\n"
-      diagram += f"                         │           │\n"
       weighted_sum += inputs[i]*weights[i]
+    output = 1 if weighted_sum >= theta else 0
+    for i in range(len(inputs)):
+      if(num_inputs % 2 == 0):
+        if i == num_inputs // 2 - 1:
+          diagram += f"  {inputs[i]} ─────x{i+1}────[{weights[i]}]──────►│   {inputs[i]}*{weights[i]}={inputs[i]*weights[i]}   │  Sum>=θ\n"
+          diagram += f"                         │           │───────────►   [{output}]\n"
+          continue
+        diagram += f"  {inputs[i]} ─────x{i+1}────[{weights[i]}]──────►│   {inputs[i]}*{weights[i]}={inputs[i]*weights[i]}   │\n"
+        diagram += f"                         │           │\n"
+      else:
+        if i == num_inputs // 2:
+          diagram += f"  {inputs[i]} ─────x{i+1}────[{weights[i]}]──────►│   {inputs[i]}*{weights[i]}={inputs[i]*weights[i]}   │────────►   [{output}]\n"
+          diagram += f"                         │           │ Sum>=θ\n"
+          continue
+        diagram += f"  {inputs[i]} ─────x{i+1}────[{weights[i]}]──────►│   {inputs[i]}*{weights[i]}={inputs[i]*weights[i]}   │\n"
+        diagram += f"                         │           │\n"
+      
     diagram += f"                         │ Sum: {weighted_sum}  │\n"
     diagram += "                         └───────────┘\n"
     diagram += "                               │\n"
